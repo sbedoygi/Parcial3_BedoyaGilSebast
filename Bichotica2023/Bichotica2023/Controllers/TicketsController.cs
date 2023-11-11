@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Bichotica2023.DAL;
 using Bichotica2023.DAL.Entities;
+using System.Net.Sockets;
 
 namespace Bichotica2023.Controllers
 {
@@ -56,14 +57,35 @@ namespace Bichotica2023.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("TicketID,UseDate,IsUsed,EntranceGate,Id,CreateDate,ModifiedDate")] Ticket ticket)
+        public async Task<IActionResult> Create([Bind("TicketID,UseDate,IsUsed,EntranceGate,Id,CreateDate,ModifiedDate")] Ticket , Ticket.Entrance? entrance)
         {
             if (ModelState.IsValid)
             {
-                ticket.Id = Guid.NewGuid();
-                _context.Add(ticket);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                try
+                {
+                    ticket.Id = Guid.NewGuid();
+                    ticket.CreateDate = DateTime.Now;
+                    ticket.EntranceGate = entrance;
+                    _context.Add(ticket);
+                    await _context.SaveChangesAsync();
+                    return RedirectToAction(nameof(Index));
+
+                }
+                catch (DbUpdateException dbUpdateException)
+                {
+                    if (dbUpdateException.InnerException.Message.Contains("duplicate"))
+                    {
+                        ModelState.AddModelError(string.Empty, "Ya se encuentra registado éste Ticket, Intentelo de nuevo!.");
+                    }
+                    else
+                    {
+                        ModelState.AddModelError(string.Empty, dbUpdateException.InnerException.Message);
+                    }
+                }
+                catch (Exception exception)
+                {
+                    ModelState.AddModelError(string.Empty, exception.Message);
+                }
             }
             return View(ticket);
         }
@@ -98,23 +120,39 @@ namespace Bichotica2023.Controllers
 
             if (ModelState.IsValid)
             {
-                try
+                var chk = await _context.Tickets.
+                    FirstOrDefaultAsync(t => t.TicketID == ticket.TicketID && t.IsUsed);
+                if (chk == null)
                 {
-                    _context.Update(ticket);
-                    await _context.SaveChangesAsync();
+                    try
+                    {
+                        ticket.UseDate = DateTime.Now;
+                        ticket.ModifiedDate = DateTime.Now;
+                        _context.Update(ticket);
+                        await _context.SaveChangesAsync();
+                        return RedirectToAction(nameof(Index));
+                    }
+                    catch (DbUpdateException dbUpdateException)
+                    {
+                        if (dbUpdateException.InnerException.Message.Contains("duplicate"))
+                        {
+                            ModelState.AddModelError(string.Empty, "Ya se encuentra registado éste Ticket, Intentelo de nuevo!.");
+                        }
+                        else
+                        {
+                            ModelState.AddModelError(string.Empty, dbUpdateException.InnerException.Message);
+                        }
+                    }
+                    catch (Exception exception)
+                    {
+                        ModelState.AddModelError(string.Empty, exception.Message);
+                    }
                 }
-                catch (DbUpdateConcurrencyException)
+                else
                 {
-                    if (!TicketExists(ticket.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
+                    ModelState.AddModelError(string.Empty, "El ticket[" + chk.TicketID + "] fue activado el día. [" + chk.UseDate + "] registrado por la entrada [" + chk.EntranceGate + "]");
+
                 }
-                return RedirectToAction(nameof(Index));
             }
             return View(ticket);
         }
