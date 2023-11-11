@@ -1,0 +1,39 @@
+body {
+    padding-top: 60px;
+}
+
+.jumbotron {
+    background-image: url('tu-imagen-de-concierto.jpg');
+    color: #fff;
+    text-align: center;
+    padding: 100px;
+    margin-bottom: 0;
+}
+
+.evento-info {
+    background-color: #fff;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.titulo-evento {
+    font-size: 36px;
+    margin-bottom: 20px;
+}
+
+.fecha-hora {
+    font-size: 18px;
+    color: #777;
+}
+
+.descripcion {
+    font-size: 16px;
+    margin-top: 20px;
+}
+
+/* Bootstrap */
+.btn-comprar {
+    background-color: #007bff;
+    color: #fff;
+}

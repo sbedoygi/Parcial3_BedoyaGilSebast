@@ -1,8 +1,33 @@
 ﻿@{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "Concierto de La Bichota";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div class="container mt-5">
+    <div class="jumbotron">
+        <h1 class="display-4">Concierto de La Bichota</h1>
+        <p class="lead">¡Compra tus boletos y únete a la fiesta!</p>
+        <a class="btn btn-comprar btn-lg" href="#">Comprar boletos</a>
+    </div>
+
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card mb-4">
+                <img src="carol2.jpg" class="card-img-top" alt="">
+                <div class="card-body">
+                    <h5 class="card-title">Artista Especial</h5>
+                    <p class="card-text">¡No te pierdas la actuación especial de...</p>
+                    <a href="@Url.Action("Index", "Tickets")" class="btn btn-primary">Detalles</a>
+                </div>
+            </div>
+        </div>
+
+     
+         
+    </div>
 </div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
