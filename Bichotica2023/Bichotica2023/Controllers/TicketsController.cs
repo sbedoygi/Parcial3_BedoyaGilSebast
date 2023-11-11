@@ -157,7 +157,7 @@ namespace Bichotica2023.Controllers
             return View(ticket);
         }
 
-        // GET: Tickets/Delete/5
+        // GET: Tickets/Delete/55
         public async Task<IActionResult> Delete(Guid? id)
         {
             if (id == null || _context.Tickets == null)
