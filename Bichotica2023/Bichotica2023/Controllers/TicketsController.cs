@@ -23,9 +23,9 @@ namespace Bichotica2023.Controllers
         // GET: Tickets
         public async Task<IActionResult> Index()
         {
-              return _context.Tickets != null ? 
-                          View(await _context.Tickets.ToListAsync()) :
-                          Problem("Entity set 'DataBaseContext.Tickets'  is null.");
+            return _context.Tickets != null ?
+                        View(await _context.Tickets.ToListAsync()) :
+                        Problem("Entity set 'DataBaseContext.Tickets'  is null.");
         }
 
         // GET: Tickets/Details/5
@@ -57,7 +57,7 @@ namespace Bichotica2023.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("TicketID,UseDate,IsUsed,EntranceGate,Id,CreateDate,ModifiedDate")] Ticket , Ticket.Entrance? entrance)
+        public async Task<IActionResult> Create([Bind("TicketID,UseDate,IsUsed,EntranceGate,Id,CreateDate,ModifiedDate")] Ticket ticket, Ticket.Entrance? entrance)
         {
             if (ModelState.IsValid)
             {
@@ -75,7 +75,7 @@ namespace Bichotica2023.Controllers
                 {
                     if (dbUpdateException.InnerException.Message.Contains("duplicate"))
                     {
-                        ModelState.AddModelError(string.Empty, "Ya se encuentra registado éste Ticket, Intentelo de nuevo!.");
+                        ModelState.AddModelError(string.Empty, "Ya se encuentra registado éste Ticket, Intentelo de nuevo Boleta no válida!.");
                     }
                     else
                     {
@@ -136,7 +136,7 @@ namespace Bichotica2023.Controllers
                     {
                         if (dbUpdateException.InnerException.Message.Contains("duplicate"))
                         {
-                            ModelState.AddModelError(string.Empty, "Ya se encuentra registado éste Ticket, Intentelo de nuevo!.");
+                            ModelState.AddModelError(string.Empty, "el ticke se encuentra registado éste Ticket, Intentelo de nuevo!.");
                         }
                         else
                         {
@@ -150,14 +150,14 @@ namespace Bichotica2023.Controllers
                 }
                 else
                 {
-                    ModelState.AddModelError(string.Empty, "El ticket[" + chk.TicketID + "] fue activado el día. [" + chk.UseDate + "] registrado por la entrada [" + chk.EntranceGate + "]");
+                    ModelState.AddModelError(string.Empty, " ticket[" + chk.TicketID + "]  invalido activado el día. [" + chk.UseDate + "] fue usada por  la entrada [" + chk.EntranceGate + "]");
 
                 }
             }
             return View(ticket);
         }
 
-        // GET: Tickets/Delete/55
+        // GET: Tickets/Delete/5
         public async Task<IActionResult> Delete(Guid? id)
         {
             if (id == null || _context.Tickets == null)
@@ -189,14 +189,14 @@ namespace Bichotica2023.Controllers
             {
                 _context.Tickets.Remove(ticket);
             }
-            
+
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
         private bool TicketExists(Guid id)
         {
-          return (_context.Tickets?.Any(e => e.Id == id)).GetValueOrDefault();
+            return (_context.Tickets?.Any(e => e.Id == id)).GetValueOrDefault();
         }
     }
 }
