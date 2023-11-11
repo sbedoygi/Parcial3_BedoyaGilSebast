@@ -20,7 +20,7 @@ namespace Bichotica2023.Controllers
             _context = context;
         }
 
-        // GET: Tickets
+        // GET: Tickets Muestra la lista de todos los tickets.
         public async Task<IActionResult> Index()
         {
             return _context.Tickets != null ?
@@ -28,7 +28,7 @@ namespace Bichotica2023.Controllers
                         Problem("Entity set 'DataBaseContext.Tickets'  is null.");
         }
 
-        // GET: Tickets/Details/5
+        // GET: Tickets/Details/5 
         public async Task<IActionResult> Details(Guid? id)
         {
             if (id == null || _context.Tickets == null)

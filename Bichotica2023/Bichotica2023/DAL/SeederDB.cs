@@ -20,7 +20,7 @@
         {
             if (!_context.Tickets.Any())
             {
-                for (int i = 1; i <= 50000; i++)
+                for (int i = 1; i <= 1000; i++)
                 {
                     _context.Tickets.Add(new Entities.Ticket
                     {
