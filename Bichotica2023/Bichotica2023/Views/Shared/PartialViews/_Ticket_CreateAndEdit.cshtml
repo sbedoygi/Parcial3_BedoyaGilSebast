@@ -1,0 +1,25 @@
+﻿@model Bichotica2023.DAL.Entities.Ticket
+@using static Bichotica2023.DAL.Entities.Ticket;
+
+<div class="form-group">
+    <label asp-for="TicketID" class="control-label"></label>
+    <input asp-for="TicketID" class="form-control" />
+    <span asp-validation-for="TicketID" class="text-danger"></span>
+</div>
+<div class="form-group form-check">
+    <label class="form-check-label">
+        <input class="form-check-input" asp-for="IsUsed" /> @Html.DisplayNameFor(model => model.IsUsed)
+    </label>
+</div>
+<div class="form-group">
+    <label asp-for="EntranceGate" class="control-label"></label>
+    @*<input asp-for="EntranceGate" class="form-control" /> *@
+
+    @Html.DropDownListFor(t => t.EntranceGate,
+    new SelectList(Enum.GetValues(typeof(Entrance))),
+    "Select Entrance")
+
+    <span asp-validation-for="EntranceGate" class="text-danger"></span>
+
+
+</div>
